@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="#FF8A80">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="心语桥">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>心语桥 - 职场沟通助手</title>
+  <style>
+    /* ========== 基础重置与全局样式 ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #FFFAF5;
+      color: #4A4A4A;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ========== 页面切换动画 ========== */
+    .page {
+      display: none;
+      opacity: 0;
+      transition: opacity 300ms ease;
+      padding: 20px;
+      padding-bottom: 100px;
+      min-height: 100vh;
+    }
+
+    .page.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* 尊重用户的减少动画偏好 */
+    @media (prefers-reduced-motion: reduce) {
+      .page { transition: none; }
+      .category-btn:active, .emotion-btn:active, .action-btn:active { transform: none !important; }
+    }
+
+    /* ========== 顶部标题栏 ========== */
+    .header {
+      text-align: center;
+      padding: 16px 0 20px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #FF8A80;
+      margin-bottom: 4px;
+    }
+
+    .header .subtitle {
+      font-size: 14px;
+      color: #888888;
+    }
+
+    /* ========== 顶部导航栏（子页面） ========== */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      padding: 12px 0 16px;
+      gap: 12px;
+    }
+
+    .back-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      border: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 150ms;
+    }
+
+    .back-btn:active { transform: scale(0.95); }
+
+    .top-bar-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #4A4A4A;
+    }
+
+    /* ========== 首页分类网格 ========== */
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 8px 0;
+    }
+
+    .category-btn {
+      min-height: 120px;
+      border-radius: 20px;
+      border: 2px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 150ms;
+      background: #FFFFFF;
+    }
+
+    .category-btn:active { transform: scale(0.95); }
+    .category-btn .emoji { font-size: 40px; line-height: 1; }
+    .category-btn .label { font-size: 18px; font-weight: 500; }
+
+    /* ========== 最近使用区域 ========== */
+    .recent-section { margin-top: 32px; }
+    .section-title { font-size: 18px; font-weight: 600; color: #4A4A4A; margin-bottom: 12px; }
+
+    .recent-item {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 150ms;
+    }
+
+    .recent-item:active { transform: scale(0.98); }
+    .recent-item .emoji { font-size: 28px; flex-shrink: 0; }
+    .recent-item .info { flex: 1; min-width: 0; }
+    .recent-item .title { font-size: 16px; font-weight: 500; }
+    .recent-item .time { font-size: 12px; color: #888888; }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #888888;
+      font-size: 15px;
+    }
+
+    .empty-state .empty-emoji {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* ========== 表达卡片 ========== */
+    .expression-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .expression-header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 150ms;
+    }
+
+    .expression-header:active { background: #f9f9f9; }
+    .expression-header .emoji { font-size: 36px; flex-shrink: 0; }
+    .expression-header .title { font-size: 18px; font-weight: 500; flex: 1; }
+    .expression-header .arrow {
+      font-size: 14px;
+      color: #888888;
+      transition: transform 300ms;
+    }
+
+    .expression-header .arrow.open { transform: rotate(90deg); }
+
+    .expression-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 300ms ease;
+    }
+
+    .expression-body.open { max-height: 400px; }
+
+    .expression-text {
+      padding: 0 16px 12px 64px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #4A4A4A;
+    }
+
+    .expression-actions {
+      display: flex;
+      gap: 8px;
+      padding: 8px 16px 16px 64px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 14px;
+      border-radius: 24px;
+      border: 1px solid #eee;
+      background: #FFFAF5;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 150ms;
+      color: #4A4A4A;
+    }
+
+    .action-btn:active { transform: scale(0.95); }
+    .action-btn.favorited { color: #FFB347; border-color: #FFB347; }
+
+    /* 收藏弹跳动画 */
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      30% { transform: scale(1.3); }
+      60% { transform: scale(0.9); }
+    }
+
+    .action-btn.bounce { animation: bounce 400ms ease; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .action-btn.bounce { animation: none; }
+    }
+
+    /* ========== 情绪选择页 ========== */
+    .emotion-intro {
+      font-size: 16px;
+      color: #888888;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .emotion-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .emotion-btn {
+      min-height: 100px;
+      border-radius: 20px;
+      border: 2px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 150ms;
+      background: #FFFFFF;
+    }
+
+    .emotion-btn:active { transform: scale(0.95); }
+    .emotion-btn .emoji { font-size: 40px; line-height: 1; }
+    .emotion-btn .label { font-size: 18px; font-weight: 500; }
+
+    .emotion-btn.center {
+      grid-column: 1 / -1;
+      max-width: 200px;
+      justify-self: center;
+      min-width: 140px;
+    }
+
+    /* ========== 情绪结果页 ========== */
+    .emotion-result-header {
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .emotion-result-header .emoji {
+      font-size: 56px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .emotion-result-header .label { font-size: 22px; font-weight: 600; }
+
+    .emotion-section {
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .emotion-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .emotion-expression-item {
+      background: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .emotion-expression-item .text { flex: 1; }
+
+    .emotion-analysis {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      color: #4A4A4A;
+    }
+
+    .emotion-advice-list { list-style: none; padding: 0; }
+
+    .emotion-advice-list li {
+      padding: 8px 0 8px 20px;
+      font-size: 15px;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .emotion-advice-list li::before {
+      content: "\2022";
+      position: absolute;
+      left: 4px;
+      color: #A8D8EA;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* ========== 模板列表页 ========== */
+    .template-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: transform 150ms;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .template-card:active { transform: scale(0.98); }
+    .template-card .emoji { font-size: 36px; flex-shrink: 0; }
+    .template-card .info { flex: 1; }
+    .template-card .title { font-size: 18px; font-weight: 500; }
+    .template-card .desc { font-size: 13px; color: #888888; }
+    .template-card .arrow { font-size: 16px; color: #888888; }
+
+    /* ========== 模板填写页 ========== */
+    .template-form {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #4A4A4A;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-select {
+      width: 100%;
+      height: 56px;
+      border-radius: 12px;
+      border: 2px solid #eee;
+      font-size: 18px;
+      padding: 0 16px;
+      background: #FFFAF5;
+      color: #4A4A4A;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888888' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      cursor: pointer;
+    }
+
+    .form-select:focus { outline: none; border-color: #FF8A80; }
+
+    .preview-area {
+      background: #E8F8F5;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .preview-label { font-size: 14px; color: #888888; margin-bottom: 8px; }
+    .preview-text { font-size: 18px; line-height: 1.8; color: #4A4A4A; min-height: 30px; }
+    .preview-actions { display: flex; gap: 10px; margin-top: 14px; }
+
+    /* ========== 历史记录页 ========== */
+    .history-item {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: transform 150ms;
+    }
+
+    .history-item:active { transform: scale(0.98); }
+
+    .history-item .top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .history-item .emoji { font-size: 24px; flex-shrink: 0; }
+    .history-item .title { font-size: 16px; font-weight: 500; flex: 1; }
+    .history-item .time { font-size: 12px; color: #888888; flex-shrink: 0; }
+
+    .history-item .full-text {
+      font-size: 15px;
+      color: #666666;
+      line-height: 1.5;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 300ms ease;
+    }
+
+    .history-item .full-text.open {
+      max-height: 200px;
+      margin-top: 8px;
+    }
+
+    /* ========== 收藏页 ========== */
+    .fav-item {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .fav-item .emoji { font-size: 32px; flex-shrink: 0; }
+    .fav-item .content { flex: 1; min-width: 0; }
+    .fav-item .title { font-size: 17px; font-weight: 500; margin-bottom: 4px; }
+    .fav-item .text { font-size: 15px; color: #666666; line-height: 1.5; }
+
+    .fav-remove-btn {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #eee;
+      background: #FFFAF5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 150ms;
+      color: #888888;
+    }
+
+    .fav-remove-btn:active { transform: scale(0.9); }
+
+    /* ========== 设置页 ========== */
+    .settings-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .setting-row + .setting-row { border-top: 1px solid #f0f0f0; }
+    .setting-label { font-size: 16px; font-weight: 500; }
+    .setting-desc { font-size: 13px; color: #888888; margin-top: 2px; }
+
+    /* 开关样式 */
+    .toggle {
+      position: relative;
+      width: 52px;
+      height: 30px;
+      border-radius: 15px;
+      background: #ddd;
+      cursor: pointer;
+      transition: background 300ms;
+      flex-shrink: 0;
+    }
+
+    .toggle.on { background: #FF8A80; }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      top: 2px;
+      left: 2px;
+      transition: transform 300ms;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .toggle.on::after { transform: translateX(22px); }
+
+    /* 语速选择 */
+    .speed-selector { display: flex; gap: 8px; }
+
+    .speed-btn {
+      padding: 8px 16px;
+      border-radius: 24px;
+      border: 2px solid #eee;
+      background: #FFFAF5;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 150ms;
+      color: #4A4A4A;
+    }
+
+    .speed-btn.active {
+      border-color: #FF8A80;
+      background: #FFF0EE;
+      color: #FF8A80;
+      font-weight: 600;
+    }
+
+    .speed-btn:active { transform: scale(0.95); }
+
+    /* ========== 底部导航栏 ========== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: #FFFFFF;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 12px;
+      transition: all 150ms;
+      text-decoration: none;
+      color: #888888;
+    }
+
+    .nav-item.active { color: #FF8A80; }
+    .nav-item .nav-emoji { font-size: 22px; line-height: 1; }
+    .nav-item .nav-label { font-size: 11px; font-weight: 500; }
+
+    /* ========== Toast 提示 ========== */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: rgba(0,0,0,0.75);
+      color: #FFFFFF;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      z-index: 200;
+      opacity: 0;
+      transition: all 300ms ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* ========== 响应式 ========== */
+    @media (min-width: 768px) {
+      .page { max-width: 600px; margin: 0 auto; }
+      .bottom-nav { max-width: 600px; left: 50%; transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast 提示 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ========== 首页 ========== -->
+  <div class="page" id="page-home">
+    <div class="header">
+      <h1>心语桥</h1>
+      <p class="subtitle">职场沟通助手</p>
+    </div>
+    <div class="category-grid" id="category-grid"></div>
+    <div class="recent-section">
+      <div class="section-title">最近使用</div>
+      <div id="recent-list"></div>
+    </div>
+  </div>
+
+  <!-- ========== 表达列表页 ========== -->
+  <div class="page" id="page-category">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title" id="category-title"></div>
+    </div>
+    <div id="expression-list"></div>
+  </div>
+
+  <!-- ========== 情绪选择页 ========== -->
+  <div class="page" id="page-emotion">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title">你现在感觉怎么样？</div>
+    </div>
+    <p class="emotion-intro">请选择最接近你现在的感觉：</p>
+    <div class="emotion-grid" id="emotion-grid"></div>
+  </div>
+
+  <!-- ========== 情绪结果页 ========== -->
+  <div class="page" id="page-emotion-result">
+    <div class="top-bar">
+      <div class="back-btn" onclick="location.hash='#/emotion'">&#8592;</div>
+      <div class="top-bar-title" id="emotion-result-title"></div>
+    </div>
+    <div id="emotion-result-content"></div>
+  </div>
+
+  <!-- ========== 沟通模板列表页 ========== -->
+  <div class="page" id="page-templates">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title">沟通模板</div>
+    </div>
+    <div id="template-list"></div>
+  </div>
+
+  <!-- ========== 模板填写页 ========== -->
+  <div class="page" id="page-template-form">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title" id="template-form-title"></div>
+    </div>
+    <div id="template-form-content"></div>
+  </div>
+
+  <!-- ========== 历史记录页 ========== -->
+  <div class="page" id="page-history">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title">使用记录</div>
+    </div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- ========== 收藏页 ========== -->
+  <div class="page" id="page-favorites">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title">我的收藏</div>
+    </div>
+    <div id="favorites-list"></div>
+  </div>
+
+  <!-- ========== 设置页 ========== -->
+  <div class="page" id="page-settings">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title">设置</div>
+    </div>
+    <div class="settings-card">
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">自动语音播报</div>
+          <div class="setting-desc">点击表达卡片时自动朗读</div>
+        </div>
+        <div class="toggle" id="auto-speak-toggle" onclick="toggleAutoSpeak()"></div>
+      </div>
+    </div>
+    <div class="settings-card">
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:12px;">
+        <div>
+          <div class="setting-label">语速选择</div>
+          <div class="setting-desc">调整语音播报的速度</div>
+        </div>
+        <div class="speed-selector" id="speed-selector">
+          <div class="speed-btn" data-speed="0.6" onclick="setSpeed(0.6)">0.6x</div>
+          <div class="speed-btn" data-speed="0.8" onclick="setSpeed(0.8)">0.8x</div>
+          <div class="speed-btn" data-speed="1.0" onclick="setSpeed(1.0)">1.0x</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 底部导航栏 ========== -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <div class="nav-item" data-tab="home" onclick="location.hash='#/home'">
+      <span class="nav-emoji">&#127968;</span>
+      <span class="nav-label">首页</span>
+    </div>
+    <div class="nav-item" data-tab="templates" onclick="location.hash='#/templates'">
+      <span class="nav-emoji">&#128203;</span>
+      <span class="nav-label">模板</span>
+    </div>
+    <div class="nav-item" data-tab="favorites" onclick="location.hash='#/favorites'">
+      <span class="nav-emoji">&#11088;</span>
+      <span class="nav-label">收藏</span>
+    </div>
+    <div class="nav-item" data-tab="settings" onclick="location.hash='#/settings'">
+      <span class="nav-emoji">&#9881;&#65039;</span>
+      <span class="nav-label">设置</span>
+    </div>
+  </nav>
+
+  <script>
+    /* ================================================================
+       心语桥 - 职场沟通辅助器
+       所有数据、路由、交互逻辑
+    ================================================================ */
+
+    // ========== 表达数据（28条，5个分类） ==========
+    var CATEGORIES = {
+      help: {
+        id: 'help', name: '我需要帮助', emoji: '\u{1F198}',
+        bg: '#FFF0EE', border: '#FF8A80',
+        expressions: [
+          { id: 'help_01', emoji: '\u2753', title: '我不太明白', text: '不好意思，我不太明白这个任务怎么做，可以再跟我说一次吗？' },
+          { id: 'help_02', emoji: '\u{1F440}', title: '请示范一次', text: '可以请您再示范一次吗？我看一遍就能学会了。' },
+          { id: 'help_03', emoji: '\u{1F64B}', title: '我做不了这个', text: '这个任务对我来说有点难，可以换一个吗？或者帮我一起做？' },
+          { id: 'help_04', emoji: '\u{1F914}', title: '我忘了怎么做', text: '我忘了下一步该怎么做，能提醒我一下吗？' },
+          { id: 'help_05', emoji: '\u{1F4D6}', title: '能写下来吗', text: '能把步骤写下来给我吗？这样我可以照着做。' },
+          { id: 'help_06', emoji: '\u{1F504}', title: '再说一遍', text: '对不起，我没有听清楚，能再说一遍吗？' }
+        ]
+      },
+      physical: {
+        id: 'physical', name: '身体不舒服', emoji: '\u{1F912}',
+        bg: '#FFF5E6', border: '#FFB347',
+        expressions: [
+          { id: 'physical_01', emoji: '\u{1F915}', title: '我头有点疼', text: '我感觉头有点疼，可以休息一会儿吗？' },
+          { id: 'physical_02', emoji: '\u{1F634}', title: '我有点累', text: '我有点累，可以休息5分钟吗？' },
+          { id: 'physical_03', emoji: '\u{1F922}', title: '我肚子不舒服', text: '我肚子有点不舒服，需要去一下洗手间。' },
+          { id: 'physical_04', emoji: '\u{1F964}', title: '我想喝水', text: '我有点渴，可以喝口水吗？' },
+          { id: 'physical_05', emoji: '\u{1F321}\uFE0F', title: '我觉得不舒服', text: '我觉得身体不太舒服，可能需要去看一下医生。' },
+          { id: 'physical_06', emoji: '\u{1F635}', title: '我有点晕', text: '我感觉有点头晕，可以坐下来休息一下吗？' }
+        ]
+      },
+      work: {
+        id: 'work', name: '工作相关', emoji: '\u{1F4BC}',
+        bg: '#E8F8F5', border: '#95E1D3',
+        expressions: [
+          { id: 'work_01', emoji: '\u2705', title: '我做完了', text: '我已经完成了这个任务，请检查一下。' },
+          { id: 'work_02', emoji: '\u23F0', title: '需要更多时间', text: '这个任务我还需要一些时间，大概还需要10分钟。' },
+          { id: 'work_03', emoji: '\u274C', title: '这个有问题', text: '这个地方好像有点问题，您能帮我看看吗？' },
+          { id: 'work_04', emoji: '\u{1F4E6}', title: '材料不够了', text: '这里的材料/工具不够了，需要补充。' },
+          { id: 'work_05', emoji: '\u{1F3AF}', title: '下一个任务', text: '我做完了这个，下一个任务是什么？' },
+          { id: 'work_06', emoji: '\u{1F4DD}', title: '请教一个问题', text: '我有一个问题想请教一下，现在方便吗？' }
+        ]
+      },
+      leave: {
+        id: 'leave', name: '请假休息', emoji: '\u{1F3E0}',
+        bg: '#E8F8F0', border: '#7EC8A0',
+        expressions: [
+          { id: 'leave_01', emoji: '\u{1F3E5}', title: '我生病了', text: '我今天身体不舒服，想请一天病假，可以吗？' },
+          { id: 'leave_02', emoji: '\u{1F4C5}', title: '有事请假', text: '我今天有点事想请半天假，下午回来上班，可以吗？' },
+          { id: 'leave_03', emoji: '\u23F8\uFE0F', title: '能休息一下吗', text: '我可以休息10分钟吗？' },
+          { id: 'leave_04', emoji: '\u{1F6AA}', title: '去一下洗手间', text: '我可以去一下洗手间吗？' }
+        ]
+      },
+      social: {
+        id: 'social', name: '社交互动', emoji: '\u{1F44B}',
+        bg: '#EBF5FB', border: '#A8D8EA',
+        expressions: [
+          { id: 'social_01', emoji: '\u{1F60A}', title: '谢谢你', text: '谢谢你帮助我！' },
+          { id: 'social_02', emoji: '\u{1F44D}', title: '做得好吗', text: '请问我做得好吗？有什么需要改进的吗？' },
+          { id: 'social_03', emoji: '\u{1F44B}', title: '你好', text: '你好！今天也请多多关照。' },
+          { id: 'social_04', emoji: '\u{1F389}', title: '我很开心', text: '我今天很开心！' },
+          { id: 'social_05', emoji: '\u{1F4AA}', title: '我会努力的', text: '我会继续努力的！' },
+          { id: 'social_06', emoji: '\u{1F91D}', title: '一起加油', text: '一起加油！' }
+        ]
+      }
+    };
+
+    // ========== 首页分类入口配置 ==========
+    var HOME_CATEGORIES = [
+      { id: 'help', emoji: '\u{1F198}', name: '需要帮助', bg: '#FFF0EE', border: '#FF8A80' },
+      { id: 'physical', emoji: '\u{1F912}', name: '身体不舒服', bg: '#FFF5E6', border: '#FFB347' },
+      { id: 'work', emoji: '\u{1F4BC}', name: '工作相关', bg: '#E8F8F5', border: '#95E1D3' },
+      { id: 'leave', emoji: '\u{1F3E0}', name: '请假休息', bg: '#E8F8F0', border: '#7EC8A0' },
+      { id: 'social', emoji: '\u{1F44B}', name: '社交互动', bg: '#EBF5FB', border: '#A8D8EA' },
+      { id: 'emotion', emoji: '\u{1F630}', name: '我感觉...', bg: '#F3E8FF', border: '#C9A0DC' }
+    ];
+
+    // ========== 情绪数据 ==========
+    var EMOTIONS = {
+      anxious: { emoji: '\u{1F630}', label: '紧张', bg: '#FFF5E6', border: '#FFB347' },
+      confused: { emoji: '\u{1F615}', label: '困惑', bg: '#EBF5FB', border: '#A8D8EA' },
+      sad:     { emoji: '\u{1F622}', label: '难过', bg: '#F3E8FF', border: '#C9A0DC' },
+      happy:   { emoji: '\u{1F60A}', label: '开心', bg: '#E8F8F0', border: '#95E1D3' },
+      tired:   { emoji: '\u{1F634}', label: '累了', bg: '#F0F0F5', border: '#B0B0C0' }
+    };
+
+    var EMOTION_DATA = {
+      anxious: {
+        expressions: ['我有点紧张，可以慢慢来吗？', '这个任务让我有点不安，能陪我一起做吗？'],
+        analysis: '员工可能感到压力过大',
+        advice: ['分解任务为更小步骤', '给予更多正面鼓励', '允许短暂休息', '避免催促']
+      },
+      confused: {
+        expressions: ['我不太明白，能再说一遍吗？', '可以用图片告诉我怎么做吗？'],
+        analysis: '员工可能没有理解指令',
+        advice: ['使用更简单的语言', '配合图片或示范', '一次只说一件事', '确认对方理解后再继续']
+      },
+      sad: {
+        expressions: ['我做了好几次都没做好，有点难过。', '可以换一个任务让我试试吗？'],
+        analysis: '员工可能遇到困难或感到挫败',
+        advice: ['肯定其努力', '帮助分析具体卡在哪里', '适当降低任务难度', '给予更多正面反馈']
+      },
+      happy: {
+        expressions: ['我今天很开心！', '我完成了任务，很有成就感！'],
+        analysis: '员工状态良好',
+        advice: ['及时表扬和肯定', '可以适当增加挑战', '鼓励社交互动', '记录积极表现']
+      },
+      tired: {
+        expressions: ['我有点累了，能休息一下吗？', '我需要喝口水。'],
+        analysis: '员工可能体力不支',
+        advice: ['安排休息时间', '检查工作强度是否合适', '提供饮水和零食', '考虑调整工作节奏']
+      }
+    };
+
+    // ========== 模板数据 ==========
+    var TEMPLATES = [
+      {
+        id: 'report', emoji: '\u{1F4CB}', title: '汇报工作完成', desc: '告诉主管你完成了任务',
+        fields: [
+          { name: 'task', label: '任务名称', options: ['理货', '清洁', '准备材料', '收拾桌面', '其他'] },
+          { name: 'status', label: '完成情况', options: ['全部完成', '大部分完成', '需要帮助'] }
+        ],
+        tpl: '我已经完成了{task}，{status}，请检查。'
+      },
+      {
+        id: 'leave', emoji: '\u{1F4C5}', title: '请假申请', desc: '向主管申请请假',
+        fields: [
+          { name: 'type', label: '请假类型', options: ['病假', '事假', '半天假'] },
+          { name: 'reason', label: '原因', options: ['身体不舒服', '家里有事', '去医院', '其他'] }
+        ],
+        tpl: '我想请{type}，因为{reason}，请问可以吗？'
+      },
+      {
+        id: 'askhelp', emoji: '\u{1F64B}', title: '请求帮助', desc: '遇到困难时请求协助',
+        fields: [
+          { name: 'helpType', label: '帮助类型', options: ['不明白任务', '找不到工具', '做错了', '需要人帮忙'] }
+        ],
+        tpl: '我{helpType}，能帮帮我吗？'
+      },
+      {
+        id: 'feedback', emoji: '\u26A0\uFE0F', title: '反馈问题', desc: '向主管反馈工作中遇到的问题',
+        fields: [
+          { name: 'issue', label: '问题类型', options: ['材料不够', '工具坏了', '东西放错了', '其他'] }
+        ],
+        tpl: '这里的{issue}，需要处理。'
+      }
+    ];
+
+    // ========== localStorage 工具函数 ==========
+    function getStorage(key, defaultVal) {
+      try {
+        var val = localStorage.getItem('heartbridge_' + key);
+        return val ? JSON.parse(val) : defaultVal;
+      } catch (e) { return defaultVal; }
+    }
+
+    function setStorage(key, val) {
+      try { localStorage.setItem('heartbridge_' + key, JSON.stringify(val)); } catch (e) {}
+    }
+
+    function getUseCount(exprId) {
+      var counts = getStorage('useCounts', {});
+      return counts[exprId] || 0;
+    }
+
+    function incrementUseCount(exprId) {
+      var counts = getStorage('useCounts', {});
+      counts[exprId] = (counts[exprId] || 0) + 1;
+      setStorage('useCounts', counts);
+    }
+
+    function addHistory(exprId, emoji, title, text) {
+      var history = getStorage('history', []);
+      history.unshift({ id: exprId, emoji: emoji, title: title, text: text, time: new Date().toISOString() });
+      if (history.length > 50) history.length = 50;
+      setStorage('history', history);
+    }
+
+    function getFavorites() { return getStorage('favorites', []); }
+
+    function toggleFavorite(exprId) {
+      var favs = getFavorites();
+      var idx = favs.indexOf(exprId);
+      if (idx === -1) { favs.push(exprId); } else { favs.splice(idx, 1); }
+      setStorage('favorites', favs);
+      return idx === -1;
+    }
+
+    function isFavorited(exprId) { return getFavorites().indexOf(exprId) !== -1; }
+
+    function getSettings() { return getStorage('settings', { autoSpeak: false, speed: 0.8 }); }
+    function saveSettings(s) { setStorage('settings', s); }
+
+    // ========== Toast 提示 ==========
+    var toastTimer = null;
+    function showToast(msg) {
+      var el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { el.classList.remove('show'); }, 1500);
+    }
+
+    // ========== 语音播报 ==========
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      var settings = getSettings();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = settings.speed || 0.8;
+      window.speechSynthesis.speak(u);
+    }
+
+    // ========== 复制 ==========
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() { showToast('已复制'); }).catch(function() { fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); showToast('已复制');
+    }
+
+    // ========== 分享 ==========
+    function canShare() { return !!navigator.share; }
+    function shareText(text) {
+      if (navigator.share) { navigator.share({ title: '心语桥', text: text }).catch(function() {}); }
+    }
+
+    // ========== 查找表达 ==========
+    function findExpression(exprId) {
+      var keys = Object.keys(CATEGORIES);
+      for (var i = 0; i < keys.length; i++) {
+        var cat = CATEGORIES[keys[i]];
+        for (var j = 0; j < cat.expressions.length; j++) {
+          if (cat.expressions[j].id === exprId) return { category: cat, expression: cat.expressions[j] };
+        }
+      }
+      return null;
+    }
+
+    // ========== 路由 ==========
+    function navigate() {
+      var hash = location.hash || '#/home';
+      var pages = document.querySelectorAll('.page');
+      for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
+      updateNav(hash);
+
+      if (hash === '#/home' || hash === '#/' || hash === '') {
+        renderHome(); showPage('page-home');
+      } else if (hash.indexOf('#/category/') === 0) {
+        renderCategory(hash.replace('#/category/', '')); showPage('page-category');
+      } else if (hash === '#/emotion') {
+        renderEmotion(); showPage('page-emotion');
+      } else if (hash.indexOf('#/emotion/') === 0) {
+        renderEmotionResult(hash.replace('#/emotion/', '')); showPage('page-emotion-result');
+      } else if (hash === '#/templates') {
+        renderTemplates(); showPage('page-templates');
+      } else if (hash.indexOf('#/template/') === 0) {
+        renderTemplateForm(hash.replace('#/template/', '')); showPage('page-template-form');
+      } else if (hash === '#/history') {
+        renderHistory(); showPage('page-history');
+      } else if (hash === '#/favorites') {
+        renderFavorites(); showPage('page-favorites');
+      } else if (hash === '#/settings') {
+        renderSettings(); showPage('page-settings');
+      } else {
+        location.hash = '#/home'; return;
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function showPage(id) {
+      var p = document.getElementById(id);
+      if (p) requestAnimationFrame(function() { p.classList.add('active'); });
+    }
+
+    function updateNav(hash) {
+      var items = document.querySelectorAll('.nav-item');
+      for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
+      var tab = 'home';
+      if (hash.indexOf('#/templates') === 0 || hash.indexOf('#/template/') === 0) tab = 'templates';
+      else if (hash === '#/favorites') tab = 'favorites';
+      else if (hash === '#/settings') tab = 'settings';
+      var a = document.querySelector('.nav-item[data-tab="' + tab + '"]');
+      if (a) a.classList.add('active');
+    }
+
+    // ========== 首页 ==========
+    function renderHome() {
+      var grid = document.getElementById('category-grid');
+      var html = '';
+      for (var i = 0; i < HOME_CATEGORIES.length; i++) {
+        var c = HOME_CATEGORIES[i];
+        var href = c.id === 'emotion' ? '#/emotion' : '#/category/' + c.id;
+        html += '<div class="category-btn" style="background:' + c.bg + ';border-color:' + c.border + ';" onclick="location.hash=\'' + href + '\'">' +
+          '<span class="emoji">' + c.emoji + '</span><span class="label">' + c.name + '</span></div>';
+      }
+      grid.innerHTML = html;
+      renderRecentList();
+    }
+
+    function renderRecentList() {
+      var container = document.getElementById('recent-list');
+      var history = getStorage('history', []);
+      if (history.length === 0) {
+        container.innerHTML = '<div class="empty-state"><span class="empty-emoji">\u{1F4DD}</span>还没有使用记录，点击上方分类开始吧</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < Math.min(3, history.length); i++) {
+        var item = history[i];
+        html += '<div class="recent-item" onclick="speak(\'' + escapeJs(item.text) + '\')">' +
+          '<span class="emoji">' + item.emoji + '</span><div class="info">' +
+          '<div class="title">' + item.title + '</div><div class="time">' + formatTime(item.time) + '</div>' +
+          '</div></div>';
+      }
+      container.innerHTML = html;
+    }
+
+    // ========== 表达列表页 ==========
+    function renderCategory(catId) {
+      var cat = CATEGORIES[catId];
+      if (!cat) { location.hash = '#/home'; return; }
+      document.getElementById('category-title').textContent = cat.emoji + ' ' + cat.name;
+
+      var sorted = cat.expressions.slice().sort(function(a, b) { return getUseCount(b.id) - getUseCount(a.id); });
+      var list = document.getElementById('expression-list');
+      var html = '';
+      for (var i = 0; i < sorted.length; i++) {
+        var e = sorted[i];
+        var fav = isFavorited(e.id);
+        var shareHtml = canShare() ? '<button class="action-btn" onclick="event.stopPropagation();shareText(\'' + escapeJs(e.text) + '\')">\uD83D\uDCE4 分享</button>' : '';
+        html += '<div class="expression-card" id="card-' + e.id + '">' +
+          '<div class="expression-header" onclick="toggleExpression(\'' + e.id + '\')">' +
+          '<span class="emoji">' + e.emoji + '</span><span class="title">' + e.title + '</span>' +
+          '<span class="arrow" id="arrow-' + e.id + '">\u25B6</span></div>' +
+          '<div class="expression-body" id="body-' + e.id + '">' +
+          '<div class="expression-text">' + e.text + '</div><div class="expression-actions">' +
+          '<button class="action-btn" onclick="event.stopPropagation();speak(\'' + escapeJs(e.text) + '\');recordUse(\'' + e.id + '\',\'' + e.emoji + '\',\'' + escapeJs(e.title) + '\',\'' + escapeJs(e.text) + '\')">\uD83D\uDD0A 朗读</button>' +
+          '<button class="action-btn" onclick="event.stopPropagation();copyText(\'' + escapeJs(e.text) + '\');recordUse(\'' + e.id + '\',\'' + e.emoji + '\',\'' + escapeJs(e.title) + '\',\'' + escapeJs(e.text) + '\')">\uD83D\uDCCB 复制</button>' +
+          shareHtml +
+          '<button class="action-btn ' + (fav ? 'favorited' : '') + '" id="fav-btn-' + e.id + '" onclick="event.stopPropagation();handleFavorite(\'' + e.id + '\',this)">' +
+          (fav ? '\u2B50 已收藏' : '\u2606 收藏') + '</button>' +
+          '</div></div></div>';
+      }
+      list.innerHTML = html;
+    }
+
+    function toggleExpression(exprId) {
+      var body = document.getElementById('body-' + exprId);
+      var arrow = document.getElementById('arrow-' + exprId);
+      var isOpen = body.classList.contains('open');
+      var ob = document.querySelectorAll('.expression-body.open');
+      for (var i = 0; i < ob.length; i++) ob[i].classList.remove('open');
+      var oa = document.querySelectorAll('.expression-header .arrow.open');
+      for (var j = 0; j < oa.length; j++) oa[j].classList.remove('open');
+      if (!isOpen) {
+        body.classList.add('open'); arrow.classList.add('open');
+        var settings = getSettings();
+        if (settings.autoSpeak) { var f = findExpression(exprId); if (f) speak(f.expression.text); }
+      }
+    }
+
+    function recordUse(exprId, emoji, title, text) {
+      incrementUseCount(exprId); addHistory(exprId, emoji, title, text);
+    }
+
+    function handleFavorite(exprId, btn) {
+      var added = toggleFavorite(exprId);
+      btn.classList.add('bounce');
+      setTimeout(function() { btn.classList.remove('bounce'); }, 400);
+      if (added) { btn.classList.add('favorited'); btn.innerHTML = '\u2B50 已收藏'; showToast('已收藏'); }
+      else { btn.classList.remove('favorited'); btn.innerHTML = '\u2606 收藏'; showToast('已取消收藏'); }
+    }
+
+    // ========== 情绪选择页 ==========
+    function renderEmotion() {
+      var grid = document.getElementById('emotion-grid');
+      var keys = Object.keys(EMOTIONS);
+      var html = '';
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i], em = EMOTIONS[k];
+        html += '<div class="emotion-btn' + (i === 4 ? ' center' : '') + '" style="background:' + em.bg + ';border-color:' + em.border + ';" onclick="location.hash=\'#/emotion/' + k + '\'">' +
+          '<span class="emoji">' + em.emoji + '</span><span class="label">' + em.label + '</span></div>';
+      }
+      grid.innerHTML = html;
+    }
+
+    // ========== 情绪结果页 ==========
+    function renderEmotionResult(emotionId) {
+      var em = EMOTIONS[emotionId], data = EMOTION_DATA[emotionId];
+      if (!em || !data) { location.hash = '#/emotion'; return; }
+      document.getElementById('emotion-result-title').textContent = em.emoji + ' ' + em.label;
+
+      var exprHtml = '';
+      for (var i = 0; i < data.expressions.length; i++) {
+        var t = data.expressions[i];
+        exprHtml += '<div class="emotion-expression-item"><span class="text">' + t + '</span>' +
+          '<button class="action-btn" onclick="speak(\'' + escapeJs(t) + '\');recordUse(\'emotion_' + emotionId + '\',\'' + em.emoji + '\',\'' + em.label + '\',\'' + escapeJs(t) + '\')">\uD83D\uDD0A</button></div>';
+      }
+      var adviceHtml = '';
+      for (var j = 0; j < data.advice.length; j++) adviceHtml += '<li>' + data.advice[j] + '</li>';
+
+      document.getElementById('emotion-result-content').innerHTML =
+        '<div class="emotion-result-header"><span class="emoji">' + em.emoji + '</span><span class="label">' + em.label + '</span></div>' +
+        '<div class="emotion-section" style="background:#E8F8F0;"><div class="emotion-section-title">你可以这样说</div>' + exprHtml + '</div>' +
+        '<div class="emotion-section" style="background:#EBF5FB;"><div class="emotion-section-title">给管理者的建议</div>' +
+        '<div class="emotion-analysis">' + data.analysis + '</div><ul class="emotion-advice-list">' + adviceHtml + '</ul></div>';
+    }
+
+    // ========== 模板列表页 ==========
+    function renderTemplates() {
+      var html = '';
+      for (var i = 0; i < TEMPLATES.length; i++) {
+        var t = TEMPLATES[i];
+        html += '<div class="template-card" onclick="location.hash=\'#/template/' + t.id + '\'">' +
+          '<span class="emoji">' + t.emoji + '</span><div class="info"><div class="title">' + t.title + '</div><div class="desc">' + t.desc + '</div></div><span class="arrow">\u25B6</span></div>';
+      }
+      document.getElementById('template-list').innerHTML = html;
+    }
+
+    // ========== 模板填写页 ==========
+    function renderTemplateForm(tplId) {
+      var tpl = null;
+      for (var i = 0; i < TEMPLATES.length; i++) { if (TEMPLATES[i].id === tplId) { tpl = TEMPLATES[i]; break; } }
+      if (!tpl) { location.hash = '#/templates'; return; }
+      document.getElementById('template-form-title').textContent = tpl.emoji + ' ' + tpl.title;
+
+      var fieldsHtml = '';
+      for (var j = 0; j < tpl.fields.length; j++) {
+        var f = tpl.fields[j], opts = '<option value="">请选择...</option>';
+        for (var k = 0; k < f.options.length; k++) opts += '<option value="' + f.options[k] + '">' + f.options[k] + '</option>';
+        fieldsHtml += '<div class="form-group"><label class="form-label">' + f.label + '</label>' +
+          '<select class="form-select" id="tpl-field-' + j + '" onchange="updateTemplatePreview(\'' + tplId + '\')">' + opts + '</select></div>';
+      }
+      var shareHtml = canShare() ? '<button class="action-btn" onclick="shareTemplate()">\uD83D\uDCE4 分享</button>' : '';
+      document.getElementById('template-form-content').innerHTML =
+        '<div class="template-form">' + fieldsHtml + '</div>' +
+        '<div class="preview-area"><div class="preview-label">预览效果</div><div class="preview-text" id="tpl-preview">请选择上方选项...</div>' +
+        '<div class="preview-actions"><button class="action-btn" onclick="speakTemplate()">\uD83D\uDD0A 朗读</button>' +
+        '<button class="action-btn" onclick="copyTemplate()">\uD83D\uDCCB 复制</button>' + shareHtml + '</div></div>';
+    }
+
+    function updateTemplatePreview(tplId) {
+      var tpl = null;
+      for (var i = 0; i < TEMPLATES.length; i++) { if (TEMPLATES[i].id === tplId) { tpl = TEMPLATES[i]; break; } }
+      if (!tpl) return;
+      var result = tpl.tpl;
+      for (var j = 0; j < tpl.fields.length; j++) {
+        var sel = document.getElementById('tpl-field-' + j);
+        result = result.replace('{' + tpl.fields[j].name + '}', sel ? sel.value : '');
+      }
+      document.getElementById('tpl-preview').textContent = result;
+    }
+
+    function getTemplateText() { return document.getElementById('tpl-preview').textContent; }
+    function speakTemplate() { var t = getTemplateText(); if (t && t.indexOf('请选择') === -1) speak(t); }
+    function copyTemplate() { var t = getTemplateText(); if (t && t.indexOf('请选择') === -1) copyText(t); }
+    function shareTemplate() { var t = getTemplateText(); if (t && t.indexOf('请选择') === -1) shareText(t); }
+
+    // ========== 历史记录页 ==========
+    function renderHistory() {
+      var container = document.getElementById('history-list');
+      var history = getStorage('history', []);
+      if (history.length === 0) {
+        container.innerHTML = '<div class="empty-state"><span class="empty-emoji">\uD83D\uDCCB</span>还没有使用记录</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < history.length; i++) {
+        var item = history[i];
+        html += '<div class="history-item" onclick="toggleHistoryItem(' + i + ')"><div class="top-row">' +
+          '<span class="emoji">' + item.emoji + '</span><span class="title">' + item.title + '</span>' +
+          '<span class="time">' + formatTime(item.time) + '</span></div>' +
+          '<div class="full-text" id="history-text-' + i + '">' + item.text + '</div></div>';
+      }
+      container.innerHTML = html;
+    }
+
+    function toggleHistoryItem(index) {
+      var el = document.getElementById('history-text-' + index);
+      var isOpen = el.classList.contains('open');
+      var all = document.querySelectorAll('.history-item .full-text.open');
+      for (var i = 0; i < all.length; i++) all[i].classList.remove('open');
+      if (!isOpen) {
+        el.classList.add('open');
+        var history = getStorage('history', []);
+        if (history[index]) speak(history[index].text);
+      }
+    }
+
+    // ========== 收藏页 ==========
+    function renderFavorites() {
+      var container = document.getElementById('favorites-list');
+      var favIds = getFavorites();
+      if (favIds.length === 0) {
+        container.innerHTML = '<div class="empty-state"><span class="empty-emoji">\u2B50</span>还没有收藏的表达</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < favIds.length; i++) {
+        var found = findExpression(favIds[i]);
+        if (found) {
+          html += '<div class="fav-item" id="fav-item-' + favIds[i] + '">' +
+            '<span class="emoji">' + found.expression.emoji + '</span><div class="content">' +
+            '<div class="title">' + found.expression.title + '</div><div class="text">' + found.expression.text + '</div></div>' +
+            '<button class="fav-remove-btn" onclick="removeFavorite(\'' + favIds[i] + '\')">\u2715</button></div>';
+        }
+      }
+      container.innerHTML = html || '<div class="empty-state"><span class="empty-emoji">\u2B50</span>还没有收藏的表达</div>';
+    }
+
+    function removeFavorite(exprId) {
+      toggleFavorite(exprId);
+      var el = document.getElementById('fav-item-' + exprId);
+      if (el) {
+        el.style.transition = 'opacity 300ms, transform 300ms';
+        el.style.opacity = '0'; el.style.transform = 'translateX(50px)';
+        setTimeout(function() { renderFavorites(); }, 300);
+      }
+      showToast('已取消收藏');
+    }
+
+    // ========== 设置页 ==========
+    function renderSettings() {
+      var settings = getSettings();
+      var toggle = document.getElementById('auto-speak-toggle');
+      if (settings.autoSpeak) toggle.classList.add('on'); else toggle.classList.remove('on');
+      var btns = document.querySelectorAll('.speed-btn');
+      for (var i = 0; i < btns.length; i++) {
+        if (parseFloat(btns[i].getAttribute('data-speed')) === settings.speed) btns[i].classList.add('active');
+        else btns[i].classList.remove('active');
+      }
+    }
+
+    function toggleAutoSpeak() {
+      var s = getSettings(); s.autoSpeak = !s.autoSpeak; saveSettings(s); renderSettings();
+    }
+
+    function setSpeed(speed) {
+      var s = getSettings(); s.speed = speed; saveSettings(s); renderSettings();
+    }
+
+    // ========== 工具函数 ==========
+    function formatTime(isoStr) {
+      try {
+        var d = new Date(isoStr), now = new Date();
+        var hh = String(d.getHours()).padStart(2, '0'), mm = String(d.getMinutes()).padStart(2, '0');
+        if (d.toDateString() === now.toDateString()) return '今天 ' + hh + ':' + mm;
+        return String(d.getMonth() + 1).padStart(2, '0') + '/' + String(d.getDate()).padStart(2, '0') + ' ' + hh + ':' + mm;
+      } catch (e) { return ''; }
+    }
+
+    function escapeJs(str) {
+      return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n');
+    }
+
+    // ========== 初始化 ==========
+    window.addEventListener('hashchange', navigate);
+    if (!location.hash || location.hash === '#') location.hash = '#/home';
+    else navigate();
+// ========== PWA Service Worker Registration ==========
+
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener("load", () => {
+
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+
+  });
+
+}
+
+  </script>
+</body>
+</html>

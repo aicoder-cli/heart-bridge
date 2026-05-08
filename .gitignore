@@ -1,1 +1,4 @@
-node_modules/\n.DS_Store\n*.swp
+node_modules/
+.DS_Store
+*.swp
+AGENTS.md

@@ -613,6 +613,330 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
+    /* ========== 登录注册页面样式 ========== */
+    .auth-container {
+      min-height: calc(100vh - 140px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-logo {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .auth-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #FF8A80;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .auth-subtitle {
+      font-size: 15px;
+      color: #888888;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .auth-form {
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #4A4A4A;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 52px;
+      border-radius: 12px;
+      border: 2px solid #eee;
+      font-size: 16px;
+      padding: 0 16px;
+      background: #FFFFFF;
+      color: #4A4A4A;
+      transition: border-color 200ms;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #FF8A80;
+    }
+
+    .input-field::placeholder {
+      color: #aaa;
+    }
+
+    .auth-btn {
+      width: 100%;
+      height: 52px;
+      border-radius: 12px;
+      border: none;
+      background: #FF8A80;
+      color: #FFFFFF;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 150ms;
+      margin-top: 8px;
+    }
+
+    .auth-btn:active {
+      transform: scale(0.98);
+      background: #ff7060;
+    }
+
+    .auth-btn.secondary {
+      background: #FFFFFF;
+      color: #4A4A4A;
+      border: 2px solid #eee;
+    }
+
+    .auth-btn.secondary:active {
+      background: #f5f5f5;
+    }
+
+    .auth-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 15px;
+      color: #888888;
+    }
+
+    .auth-link a {
+      color: #FF8A80;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #eee;
+    }
+
+    .auth-divider span {
+      padding: 0 16px;
+    }
+
+    .guest-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 2px dashed #ccc;
+      background: transparent;
+      color: #888;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 150ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .guest-btn:active {
+      transform: scale(0.98);
+      border-color: #FF8A80;
+      color: #FF8A80;
+    }
+
+    .error-msg {
+      color: #ff4444;
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block;
+    }
+
+    /* ========== 用户中心页面样式 ========== */
+    .profile-header {
+      text-align: center;
+      padding: 20px 0 24px;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF8A80, #ffb3a7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 12px;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #4A4A4A;
+      margin-bottom: 4px;
+    }
+
+    .profile-status {
+      font-size: 13px;
+      color: #888888;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 16px 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #FF8A80;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #888888;
+      margin-top: 4px;
+    }
+
+    .profile-menu {
+      background: #FFFFFF;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .profile-menu-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      cursor: pointer;
+      transition: background 150ms;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .profile-menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .profile-menu-item:active {
+      background: #f9f9f9;
+    }
+
+    .profile-menu-item .icon {
+      font-size: 22px;
+      margin-right: 12px;
+      width: 32px;
+      text-align: center;
+    }
+
+    .profile-menu-item .text {
+      flex: 1;
+      font-size: 16px;
+      color: #4A4A4A;
+    }
+
+    .profile-menu-item .arrow {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .profile-menu-item.danger .text {
+      color: #ff4444;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      border: none;
+      background: #fff5f5;
+      color: #ff4444;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: all 150ms;
+    }
+
+    .logout-btn:active {
+      transform: scale(0.98);
+      background: #ffe5e5;
+    }
+
+    /* ========== 首页用户入口 ========== */
+    .user-entry {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      background: #FFFFFF;
+      border: 1px solid #eee;
+      cursor: pointer;
+      transition: all 150ms;
+      font-size: 14px;
+      color: #4A4A4A;
+    }
+
+    .user-entry:active {
+      transform: scale(0.95);
+    }
+
+    .user-entry .avatar-small {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF8A80, #ffb3a7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .user-entry.guest {
+      background: #FFF5EE;
+      border-color: #FFB347;
+      color: #FF8A80;
+    }
+
     /* ========== 响应式 ========== */
     @media (min-width: 768px) {
       .page { max-width: 600px; margin: 0 auto; }
@@ -625,8 +949,77 @@
   <!-- Toast 提示 -->
   <div class="toast" id="toast"></div>
 
+  <!-- ========== 登录页 ========== -->
+  <div class="page" id="page-login">
+    <div class="auth-container">
+      <div class="auth-logo">&#128172;</div>
+      <h1 class="auth-title">欢迎回来</h1>
+      <p class="auth-subtitle">登录心语桥，开始温暖的沟通之旅</p>
+      <div class="auth-form">
+        <div class="input-group">
+          <label class="input-label">用户名</label>
+          <input type="text" class="input-field" id="login-username" placeholder="请输入用户名" autocomplete="off">
+          <div class="error-msg" id="login-username-error"></div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">密码</label>
+          <input type="password" class="input-field" id="login-password" placeholder="请输入密码">
+          <div class="error-msg" id="login-password-error"></div>
+        </div>
+        <button class="auth-btn" onclick="handleLogin()">登录</button>
+        <div class="auth-link">还没有账号？<a href="#" onclick="location.hash='#/register';return false;">立即注册</a></div>
+        <div class="auth-divider"><span>或者</span></div>
+        <button class="guest-btn" onclick="guestLogin()">
+          <span>&#127968;</span>
+          <span>游客模式体验</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 注册页 ========== -->
+  <div class="page" id="page-register">
+    <div class="auth-container">
+      <div class="auth-logo">&#128172;</div>
+      <h1 class="auth-title">创建账号</h1>
+      <p class="auth-subtitle">注册后可以保存收藏和使用记录</p>
+      <div class="auth-form">
+        <div class="input-group">
+          <label class="input-label">设置用户名</label>
+          <input type="text" class="input-field" id="reg-username" placeholder="请输入用户名（2-12位）" autocomplete="off">
+          <div class="error-msg" id="reg-username-error"></div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">设置密码</label>
+          <input type="password" class="input-field" id="reg-password" placeholder="请输入密码（6位以上）">
+          <div class="error-msg" id="reg-password-error"></div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">确认密码</label>
+          <input type="password" class="input-field" id="reg-confirm" placeholder="请再次输入密码">
+          <div class="error-msg" id="reg-confirm-error"></div>
+        </div>
+        <button class="auth-btn" onclick="handleRegister()">注册</button>
+        <div class="auth-link">已有账号？<a href="#" onclick="location.hash='#/login';return false;">立即登录</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 用户中心页 ========== -->
+  <div class="page" id="page-profile">
+    <div class="top-bar">
+      <div class="back-btn" onclick="history.back()">&#8592;</div>
+      <div class="top-bar-title">个人中心</div>
+    </div>
+    <div id="profile-content"></div>
+  </div>
+
   <!-- ========== 首页 ========== -->
   <div class="page" id="page-home">
+    <div id="user-entry" class="user-entry" onclick="location.hash='#/login'">
+      <div class="avatar-small">&#128100;</div>
+      <span id="user-entry-text">登录</span>
+    </div>
     <div class="header">
       <h1>心语桥</h1>
       <p class="subtitle">职场沟通助手</p>
@@ -742,9 +1135,9 @@
       <span class="nav-emoji">&#128203;</span>
       <span class="nav-label">模板</span>
     </div>
-    <div class="nav-item" data-tab="favorites" onclick="location.hash='#/favorites'">
-      <span class="nav-emoji">&#11088;</span>
-      <span class="nav-label">收藏</span>
+    <div class="nav-item" data-tab="profile" onclick="location.hash='#/profile'">
+      <span class="nav-emoji">&#128100;</span>
+      <span class="nav-label">我的</span>
     </div>
     <div class="nav-item" data-tab="settings" onclick="location.hash='#/settings'">
       <span class="nav-emoji">&#9881;&#65039;</span>
@@ -902,49 +1295,147 @@
     ];
 
     // ========== localStorage 工具函数 ==========
-    function getStorage(key, defaultVal) {
+    var CURRENT_USER = null;
+
+    function getCurrentUserId() {
+      var user = getStorage('currentUser', null);
+      if (user) return user.username;
+      return 'guest';
+    }
+
+    function getUserStorage(key, defaultVal) {
       try {
-        var val = localStorage.getItem('heartbridge_' + key);
+        var userId = getCurrentUserId();
+        var val = localStorage.getItem('heartbridge_' + userId + '_' + key);
         return val ? JSON.parse(val) : defaultVal;
       } catch (e) { return defaultVal; }
     }
 
-    function setStorage(key, val) {
-      try { localStorage.setItem('heartbridge_' + key, JSON.stringify(val)); } catch (e) {}
+    function setUserStorage(key, val) {
+      try {
+        var userId = getCurrentUserId();
+        localStorage.setItem('heartbridge_' + userId + '_' + key, JSON.stringify(val));
+      } catch (e) {}
+    }
+
+    function getAllUsers() {
+      return getStorage('allUsers', []);
+    }
+
+    function saveAllUsers(users) {
+      setStorage('allUsers', users);
+    }
+
+    function findUser(username) {
+      var users = getAllUsers();
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].username === username) return users[i];
+      }
+      return null;
+    }
+
+    function addUser(username, password) {
+      var users = getAllUsers();
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].username === username) return false;
+      }
+      users.push({
+        username: username,
+        password: password,
+        createdAt: new Date().toISOString()
+      });
+      saveAllUsers(users);
+      return true;
+    }
+
+    function verifyUser(username, password) {
+      var user = findUser(username);
+      return user && user.password === password;
+    }
+
+    function login(username) {
+      setStorage('currentUser', { username: username, isGuest: false });
+      CURRENT_USER = username;
+      updateUserEntry();
+    }
+
+    function guestLogin() {
+      setStorage('currentUser', { username: 'guest', isGuest: true });
+      CURRENT_USER = 'guest';
+      showToast('欢迎使用游客模式');
+      location.hash = '#/home';
+    }
+
+    function logout() {
+      setStorage('currentUser', null);
+      CURRENT_USER = null;
+      showToast('已退出登录');
+      location.hash = '#/login';
+    }
+
+    function updateUserEntry() {
+      var entry = document.getElementById('user-entry');
+      var text = document.getElementById('user-entry-text');
+      if (!entry || !text) return;
+      
+      var user = getStorage('currentUser', null);
+      if (user && !user.isGuest) {
+        entry.classList.remove('guest');
+        text.textContent = user.username;
+      } else if (user && user.isGuest) {
+        entry.classList.add('guest');
+        text.textContent = '游客';
+      } else {
+        entry.classList.remove('guest');
+        text.textContent = '登录';
+      }
     }
 
     function getUseCount(exprId) {
-      var counts = getStorage('useCounts', {});
+      var counts = getUserStorage('useCounts', {});
       return counts[exprId] || 0;
     }
 
     function incrementUseCount(exprId) {
-      var counts = getStorage('useCounts', {});
+      var counts = getUserStorage('useCounts', {});
       counts[exprId] = (counts[exprId] || 0) + 1;
-      setStorage('useCounts', counts);
+      setUserStorage('useCounts', counts);
     }
 
     function addHistory(exprId, emoji, title, text) {
-      var history = getStorage('history', []);
+      var history = getUserStorage('history', []);
       history.unshift({ id: exprId, emoji: emoji, title: title, text: text, time: new Date().toISOString() });
       if (history.length > 50) history.length = 50;
-      setStorage('history', history);
+      setUserStorage('history', history);
     }
 
-    function getFavorites() { return getStorage('favorites', []); }
+    function getFavorites() { return getUserStorage('favorites', []); }
 
     function toggleFavorite(exprId) {
       var favs = getFavorites();
       var idx = favs.indexOf(exprId);
       if (idx === -1) { favs.push(exprId); } else { favs.splice(idx, 1); }
-      setStorage('favorites', favs);
+      setUserStorage('favorites', favs);
       return idx === -1;
     }
 
     function isFavorited(exprId) { return getFavorites().indexOf(exprId) !== -1; }
 
-    function getSettings() { return getStorage('settings', { autoSpeak: false, speed: 0.8 }); }
-    function saveSettings(s) { setStorage('settings', s); }
+    function getSettings() { return getUserStorage('settings', { autoSpeak: false, speed: 0.8 }); }
+    function saveSettings(s) { setUserStorage('settings', s); }
+
+    function getUserStats() {
+      var history = getUserStorage('history', []);
+      var favorites = getFavorites();
+      var useCounts = getUserStorage('useCounts', {});
+      var totalUse = 0;
+      for (var key in useCounts) { totalUse += useCounts[key]; }
+      return {
+        totalUse: totalUse,
+        historyCount: history.length,
+        favoritesCount: favorites.length
+      };
+    }
 
     // ========== Toast 提示 ==========
     var toastTimer = null;
@@ -954,6 +1445,123 @@
       el.classList.add('show');
       clearTimeout(toastTimer);
       toastTimer = setTimeout(function() { el.classList.remove('show'); }, 1500);
+    }
+
+    // ========== 登录注册处理 ==========
+    function showError(fieldId, msg) {
+      var el = document.getElementById(fieldId);
+      if (el) {
+        el.textContent = msg;
+        el.classList.add('show');
+      }
+    }
+
+    function clearErrors() {
+      var errors = document.querySelectorAll('.error-msg');
+      for (var i = 0; i < errors.length; i++) errors[i].classList.remove('show');
+    }
+
+    function handleLogin() {
+      clearErrors();
+      var username = document.getElementById('login-username').value.trim();
+      var password = document.getElementById('login-password').value;
+
+      if (!username) {
+        showError('login-username-error', '请输入用户名');
+        return;
+      }
+      if (!password) {
+        showError('login-password-error', '请输入密码');
+        return;
+      }
+      if (!verifyUser(username, password)) {
+        showError('login-password-error', '用户名或密码错误');
+        return;
+      }
+      login(username);
+      showToast('登录成功');
+      location.hash = '#/home';
+    }
+
+    function handleRegister() {
+      clearErrors();
+      var username = document.getElementById('reg-username').value.trim();
+      var password = document.getElementById('reg-password').value;
+      var confirm = document.getElementById('reg-confirm').value;
+
+      if (!username) {
+        showError('reg-username-error', '请输入用户名');
+        return;
+      }
+      if (username.length < 2 || username.length > 12) {
+        showError('reg-username-error', '用户名需要2-12位');
+        return;
+      }
+      if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/.test(username)) {
+        showError('reg-username-error', '用户名只能包含字母、数字、汉字和下划线');
+        return;
+      }
+      if (!password) {
+        showError('reg-password-error', '请输入密码');
+        return;
+      }
+      if (password.length < 6) {
+        showError('reg-password-error', '密码需要6位以上');
+        return;
+      }
+      if (password !== confirm) {
+        showError('reg-confirm-error', '两次密码不一致');
+        return;
+      }
+      if (!addUser(username, password)) {
+        showError('reg-username-error', '用户名已存在');
+        return;
+      }
+      login(username);
+      showToast('注册成功');
+      location.hash = '#/home';
+    }
+
+    // ========== 用户中心 ==========
+    function renderProfile() {
+      var container = document.getElementById('profile-content');
+      var user = getStorage('currentUser', null);
+      var stats = getUserStats();
+
+      if (user && !user.isGuest) {
+        container.innerHTML =
+          '<div class="profile-header"><div class="profile-avatar">&#128100;</div>' +
+          '<div class="profile-name">' + user.username + '</div>' +
+          '<div class="profile-status">已登录</div></div>' +
+          '<div class="stats-grid">' +
+          '<div class="stat-card"><div class="stat-value">' + stats.totalUse + '</div><div class="stat-label">使用次数</div></div>' +
+          '<div class="stat-card"><div class="stat-value">' + stats.historyCount + '</div><div class="stat-label">历史记录</div></div>' +
+          '<div class="stat-card"><div class="stat-value">' + stats.favoritesCount + '</div><div class="stat-label">收藏</div></div>' +
+          '</div>' +
+          '<div class="profile-menu">' +
+          '<div class="profile-menu-item" onclick="location.hash=\'#/history\'"><span class="icon">&#128203;</span><span class="text">使用记录</span><span class="arrow">&#8250;</span></div>' +
+          '<div class="profile-menu-item" onclick="location.hash=\'#/favorites\'"><span class="icon">&#11088;</span><span class="text">我的收藏</span><span class="arrow">&#8250;</span></div>' +
+          '<div class="profile-menu-item" onclick="location.hash=\'#/settings\'"><span class="icon">&#9881;&#65039;</span><span class="text">设置</span><span class="arrow">&#8250;</span></div>' +
+          '</div>' +
+          '<button class="logout-btn" onclick="logout()">退出登录</button>';
+      } else {
+        container.innerHTML =
+          '<div class="profile-header"><div class="profile-avatar">&#127968;</div>' +
+          '<div class="profile-name">游客用户</div>' +
+          '<div class="profile-status">体验模式，部分功能受限</div></div>' +
+          '<div class="stats-grid">' +
+          '<div class="stat-card"><div class="stat-value">' + stats.totalUse + '</div><div class="stat-label">使用次数</div></div>' +
+          '<div class="stat-card"><div class="stat-value">' + stats.historyCount + '</div><div class="stat-label">历史记录</div></div>' +
+          '<div class="stat-card"><div class="stat-value">' + stats.favoritesCount + '</div><div class="stat-label">收藏</div></div>' +
+          '</div>' +
+          '<div class="profile-menu">' +
+          '<div class="profile-menu-item" onclick="location.hash=\'#/history\'"><span class="icon">&#128203;</span><span class="text">使用记录</span><span class="arrow">&#8250;</span></div>' +
+          '<div class="profile-menu-item" onclick="location.hash=\'#/favorites\'"><span class="icon">&#11088;</span><span class="text">我的收藏</span><span class="arrow">&#8250;</span></div>' +
+          '<div class="profile-menu-item" onclick="location.hash=\'#/settings\'"><span class="icon">&#9881;&#65039;</span><span class="text">设置</span><span class="arrow">&#8250;</span></div>' +
+          '</div>' +
+          '<button class="auth-btn" onclick="location.hash=\'#/login\'">登录账号</button>' +
+          '<button class="logout-btn" style="background:#fff5ee;color:#FF8A80;margin-top:10px;" onclick="location.hash=\'#/register\'">注册账号</button>';
+      }
     }
 
     // ========== 语音播报 ==========
@@ -1005,8 +1613,15 @@
       var pages = document.querySelectorAll('.page');
       for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
       updateNav(hash);
+      updateUserEntry();
 
-      if (hash === '#/home' || hash === '#/' || hash === '') {
+      if (hash === '#/login') {
+        showPage('page-login');
+      } else if (hash === '#/register') {
+        showPage('page-register');
+      } else if (hash === '#/profile') {
+        renderProfile(); showPage('page-profile');
+      } else if (hash === '#/home' || hash === '#/' || hash === '') {
         renderHome(); showPage('page-home');
       } else if (hash.indexOf('#/category/') === 0) {
         renderCategory(hash.replace('#/category/', '')); showPage('page-category');
@@ -1062,7 +1677,7 @@
 
     function renderRecentList() {
       var container = document.getElementById('recent-list');
-      var history = getStorage('history', []);
+      var history = getUserStorage('history', []);
       if (history.length === 0) {
         container.innerHTML = '<div class="empty-state"><span class="empty-emoji">\u{1F4DD}</span>还没有使用记录，点击上方分类开始吧</div>';
         return;
@@ -1222,7 +1837,7 @@
     // ========== 历史记录页 ==========
     function renderHistory() {
       var container = document.getElementById('history-list');
-      var history = getStorage('history', []);
+      var history = getUserStorage('history', []);
       if (history.length === 0) {
         container.innerHTML = '<div class="empty-state"><span class="empty-emoji">\uD83D\uDCCB</span>还没有使用记录</div>';
         return;
@@ -1245,7 +1860,7 @@
       for (var i = 0; i < all.length; i++) all[i].classList.remove('open');
       if (!isOpen) {
         el.classList.add('open');
-        var history = getStorage('history', []);
+        var history = getUserStorage('history', []);
         if (history[index]) speak(history[index].text);
       }
     }
@@ -1318,8 +1933,21 @@
 
     // ========== 初始化 ==========
     window.addEventListener('hashchange', navigate);
-    if (!location.hash || location.hash === '#') location.hash = '#/home';
-    else navigate();
+    
+    function init() {
+      var user = getStorage('currentUser', null);
+      if (!user) {
+        location.hash = '#/login';
+      } else if (location.hash === '#/login' || location.hash === '#/register') {
+        location.hash = '#/home';
+      } else if (!location.hash || location.hash === '#') {
+        location.hash = '#/home';
+      }
+      navigate();
+      updateUserEntry();
+    }
+
+    init();
 // ========== PWA Service Worker Registration ==========
 
 if ("serviceWorker" in navigator) {
